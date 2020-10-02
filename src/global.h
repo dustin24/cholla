@@ -193,6 +193,7 @@ struct parameters
   char outdir[MAXLEN];
   char indir[MAXLEN]; //Folder to load Initial conditions from
   Real rho;
+  Real n;
   Real vx;
   Real vy;
   Real vz;

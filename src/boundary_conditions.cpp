@@ -529,6 +529,9 @@ void Grid3D::Custom_Boundary(char bcnd[MAXLEN])
   if (strcmp(bcnd, "noh")==0) {
     Noh_Boundary();
   }
+  if (strcmp(bcnd, "wind")==0) {
+    Wind_Boundary();
+  }
   else {
     printf("ABORT: %s -> Unknown custom boundary condition.\n", bcnd);
     exit(0);
@@ -630,7 +633,5 @@ void Grid3D::Noh_Boundary()
     }
 
   }
-
 }
-
 

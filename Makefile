@@ -28,7 +28,7 @@ DFLAGS += -DPRECISION=2
 #Set output preferences
 DFLAGS += -DOUTPUT
 #DFLAGS += -DBINARY
-#DFLAGS += -DHDF5
+DFLAGS += -DHDF5
 #DFLAGS += -DSLICES
 #DFLAGS += -DPROJECTION
 #DFLAGS += -DROTATED_PROJECTION
@@ -53,7 +53,7 @@ DFLAGS += -DHLLC
 DFLAGS += -DVL
 
 # Use Dual Energy Formalism
-#DFLAGS += -DDE
+DFLAGS += -DDE
 
 # Evolve additional scalars
 #DFLAGS += -DSCALAR
@@ -69,7 +69,7 @@ DFLAGS += -DVL
 #DFLAGS += -DDYNAMIC_GPU_ALLOC
 
 # Set the cooling function
-#DFLAGS += -DCOOLING_GPU 
+DFLAGS += -DCOOLING_GPU 
 #DFLAGS += -DCLOUDY_COOL
 
 # Use Tiled Iitial Conditions for Scaling Tets
@@ -129,16 +129,16 @@ ifeq ($(findstring -DCUFFT,$(DFLAGS)),-DCUFFT)
 endif
 
 ifeq ($(findstring -DHDF5,$(DFLAGS)),-DHDF5)
-	CFLAGS += -I$(HDF5INCLUDE)
-	CXXFLAGS += -I$(HDF5INCLUDE)
-	GPUFLAGS += -I$(HDF5INCLUDE)
-	LIBS += -L$(HDF5DIR) -lhdf5
+	CFLAGS += -I$(OLCF_HDF5_ROOT)/include
+	CXXFLAGS += -I$(OLCF_HDF5_ROOT)/include
+	GPUFLAGS += -I$(OLCF_HDF5_ROOT)/include
+	LIBS += -L$(OLCF_HDF5_ROOT)/lib -lhdf5
 endif
 
 ifeq ($(findstring -DMPI_CHOLLA,$(DFLAGS)),-DMPI_CHOLLA)
 	CC = mpicc
 	CXX = mpicxx
-	GPUFLAGS += -I$(MPI_HOME)/include
+	GPUFLAGS += -I$(MPI_ROOT)/include
 endif
 
 ifeq ($(findstring -DCUDA,$(DFLAGS)),-DCUDA)
@@ -146,7 +146,7 @@ ifeq ($(findstring -DCUDA,$(DFLAGS)),-DCUDA)
 	GPUFLAGS += --expt-extended-lambda -g -O3 -arch sm_70 -fmad=false
 	LD := $(CXX)
 	LDFLAGS := $(CXXFLAGS)
-	LIBS += -L$(CUDA_DIR)/lib64 -lcudart
+	LIBS += -L$(OLCF_CUDA_ROOT)/lib64 -lcudart
 endif
 
 ifeq ($(findstring -DCOOLING_GRACKLE,$(DFLAGS)),-DCOOLING_GRACKLE)

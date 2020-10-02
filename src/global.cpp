@@ -212,6 +212,8 @@ parms->scale_outputs_file[0] = '\0';
       strncpy (parms->indir, value, MAXLEN);
     else if (strcmp(name, "rho")==0)
       parms->rho = atof(value);
+    else if (strcmp(name, "n")==0)
+      parms->n = atof(value);
     else if (strcmp(name, "vx")==0)
       parms->vx = atof(value);
     else if (strcmp(name, "vy")==0)

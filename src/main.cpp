@@ -180,7 +180,9 @@ int main(int argc, char *argv[])
     
     // update the simulation time ( t += dt )
     G.Update_Time();
-    
+
+    // add mass to the grid
+    G.Add_Mass();
         
     #ifdef GRAVITY
     //Compute Gravitational potential for next step
