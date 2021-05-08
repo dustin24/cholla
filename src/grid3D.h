@@ -575,8 +575,6 @@ class Grid3D
      *  \brief Apply analytic boundary conditions to +x, +y (and +z) faces, 
         as per the Noh problem in Liska, 2003, or in Stone, 2008. */
     void Noh_Boundary();
-
-    void Wind_Boundary();
     
     /*! \fn void Spherical_Overpressure_3D()
      *  \brief Initialize the grid with a 3D spherical overdensity and overpressue. */
@@ -590,9 +588,10 @@ class Grid3D
     
     void Zeldovich_Pancake( struct parameters P );
 
-    void Wind(Real n, Real vx, Real vy, Real vz, Real P);
+    void Background(Real n, Real vx, Real vy, Real vz, Real P);
 
-    void Add_Mass();
+    void Inject(); 
+
 
 
 #ifdef   MPI_CHOLLA

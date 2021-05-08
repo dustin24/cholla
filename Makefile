@@ -13,7 +13,7 @@ CUOBJS := $(subst .cu,.o,$(GPUFILES))
 DFLAGS += -DCUDA #-DCUDA_ERROR_CHECK
 
 #To use MPI, DFLAGS must also include -DMPI_CHOLLA
-#DFLAGS += -DMPI_CHOLLA -DBLOCK
+DFLAGS += -DMPI_CHOLLA -DBLOCK
 
 #Set the MPI Processes grid [nproc_x, nproc_y, nproc_z]
 #DFLAGS += -DSET_MPI_GRID
@@ -69,7 +69,7 @@ DFLAGS += -DDE
 #DFLAGS += -DDYNAMIC_GPU_ALLOC
 
 # Set the cooling function
-DFLAGS += -DCOOLING_GPU 
+#DFLAGS += -DCOOLING_GPU 
 #DFLAGS += -DCLOUDY_COOL
 
 # Use Tiled Iitial Conditions for Scaling Tets
@@ -129,16 +129,16 @@ ifeq ($(findstring -DCUFFT,$(DFLAGS)),-DCUFFT)
 endif
 
 ifeq ($(findstring -DHDF5,$(DFLAGS)),-DHDF5)
-	CFLAGS += -I$(OLCF_HDF5_ROOT)/include
-	CXXFLAGS += -I$(OLCF_HDF5_ROOT)/include
-	GPUFLAGS += -I$(OLCF_HDF5_ROOT)/include
-	LIBS += -L$(OLCF_HDF5_ROOT)/lib -lhdf5
+	CFLAGS += -I$(HDF5_HOME)/include
+	CXXFLAGS += -I$(HDF5_HOME)/include
+	GPUFLAGS += -I$(HDF5_HOME)/include
+	LIBS += -L$(HDF5_HOME)/lib -lhdf5
 endif
 
 ifeq ($(findstring -DMPI_CHOLLA,$(DFLAGS)),-DMPI_CHOLLA)
 	CC = mpicc
 	CXX = mpicxx
-	GPUFLAGS += -I$(MPI_ROOT)/include
+	GPUFLAGS += -I$(MPI_HOME)/include
 endif
 
 ifeq ($(findstring -DCUDA,$(DFLAGS)),-DCUDA)

@@ -61,9 +61,10 @@ void Grid3D::Set_Initial_Conditions(parameters P) {
     Spherical_Overpressure_3D();    
   } else if (strcmp(P.init, "Spherical_Overdensity_3D")==0) {
     Spherical_Overdensity_3D();    
-  } else if (strcmp(P.init, "Wind")==0) {
-    Wind(P.n, P.vx, P.vy, P.vz, P.P);
-  } else if (strcmp(P.init, "Read_Grid")==0) {
+  } else if (strcmp(P.init, "Background")==0) {
+    Background(P.n, P.vx, P.vy, P.vz, P.P);
+  }
+    else if (strcmp(P.init, "Read_Grid")==0) {
     #ifndef ONLY_PARTICLES
     Read_Grid(P);    
     #else
@@ -776,7 +777,6 @@ void Grid3D::Gresho()
       vx = 0.0;
       vy = 0.0;
       P = 0.0;
-
       // monte carlo sample to get an integrated value for vx, vy, P
       for (int ii = 0; ii<N; ii++) {
         // get a random dx and dy to sample within the cell
@@ -1250,4 +1250,3 @@ void Grid3D::Zeldovich_Pancake( struct parameters P ){
   #endif //COSMOLOGY
   
 }
-
