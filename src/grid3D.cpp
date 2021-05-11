@@ -305,7 +305,7 @@ void Grid3D::AllocateMemory(void)
   #else //NOT ONLY_PARTICLES
 
   //Compute the hydro delta_t ( H.dt )  
-  if (H.n_step == 0) {
+  if (H.n_step == 0 || H.SN) {
     max_dti = calc_dti_CPU();
   }
   else {

@@ -244,6 +244,7 @@ struct Header
   *  \brief Flag set to true when all the data will  be written to file (Restart File ) */
   bool Output_Complete_Data;
   
+  bool SN;
 
 };
 
