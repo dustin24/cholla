@@ -84,24 +84,33 @@ void Grid3D::Inject()
   int i, j, k, id;
   Real x_pos, y_pos, z_pos;
   Real r, center_x, center_y, center_z;
-  Real E_dot, M_dot, q_dot, Q_dot, E_tot, M_tot;
-  Real alpha, beta, SFR, R, V;  
-  Real vx, vy, vz; 
+  Real E_dot_tot, M_dot_tot, E_tot, M_tot;
+  Real E_dot, M_dot, q_dot, Q_dot, q_dot0, Q_dot0, V;
+  Real alpha, beta, SFR, R;  
+  Real Delta; 
   
-  center_x = 0.5;
-  center_y = 0.5;
-  center_z = 0.5;
+  center_x = 0.35;
+  center_y = 0.35;
+  center_z = 0.35;
 
-  alpha    = 0.1;
-  beta     = 0.3;
+  alpha    = 0.8;
+  // Here beta assumes a heaviside function, transitioning at 15 Myr. 
+  // We want to set up massive heavy clouds, but then advect away the cooling radius so it is multiphase on kpc scales
+  // Is this true to nature? Quite possibly, as I wouldn't expect SNE Rates to be constant but who knows LOLOL
+  if (H.t <= 20000){
+    beta = 1.3; 
+  }
+    else{
+      beta = 0.2;
+    }
+
   R        = 0.3; 
-  SFR      = 10;
+  SFR      = 10.0;
+
+  Delta    = 0.0; 
 
   int n_cells = 0;
    
-  V = (4/3)*PI*(R*R*R);
-  
-
   // Start adding energy and mass after 100 kyr 
   if (H.t > 100) {
 
@@ -117,15 +126,9 @@ void Grid3D::Inject()
     Msun = MASS_UNIT;
     yr = TIME_UNIT / 1e3; 
 
-    M_dot = (beta  * SFR  * (Msun / yr))   / (MASS_UNIT/TIME_UNIT);   
-    E_dot = (alpha * SFR  *  3.1e41    )   / (MASS_UNIT*VELOCITY_UNIT*VELOCITY_UNIT/TIME_UNIT);   
-    
-    q_dot = M_dot / V; 
-    Q_dot = E_dot / V; 
+    M_dot_tot = (beta  * SFR  * (Msun / yr))   / (MASS_UNIT/TIME_UNIT);   
+    E_dot_tot = (alpha * SFR  *  3.1e41    )   / (MASS_UNIT*VELOCITY_UNIT*VELOCITY_UNIT/TIME_UNIT);   
 
-    vx = 0;
-    vy = 0;
-    vz = 0;
       
     for (k=H.n_ghost; k<H.nz-H.n_ghost; k++) {
       for (j=H.n_ghost; j<H.ny-H.n_ghost; j++) {
@@ -138,6 +141,15 @@ void Grid3D::Inject()
           Get_Position(i, j, k, &x_pos, &y_pos, &z_pos);
 
           r = sqrt( (x_pos-center_x)*(x_pos-center_x) + (y_pos-center_y)*(y_pos-center_y) + (z_pos-center_z)*(z_pos-center_z) );
+
+          V = (4.0/3.0)*PI*(R*R*R);
+
+          q_dot0 = ((3.0-Delta)/3.0) * (M_dot_tot/V); 
+          Q_dot0 = ((3.0-Delta)/3.0) * (E_dot_tot/V); 
+          
+          q_dot  = q_dot0 * pow((R/r),Delta) ;
+	  Q_dot  = Q_dot0 * pow((R/r),Delta) ; 
+
           if ( r < R ) {
             // Add the mass and energy 
             C.density[id]    += q_dot * H.dt;            
@@ -155,7 +167,8 @@ void Grid3D::Inject()
     E_tot = n_cells*H.dx*H.dy*H.dz*Q_dot*H.dt;
     printf("Mass added: %e\n", M_tot);
     printf("Energy added: %e\n", E_tot);
-    printf("volume: %e\n", V);
+    printf("alpha: %e\n", alpha);
+    printf("beta: %e\n", beta);
     printf("R: %e\n", R);
     // printf("qDot: %e\n", q_dot);
     // printf("QDot: %e\n", Q_dot);

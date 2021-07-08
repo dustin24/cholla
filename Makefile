@@ -13,7 +13,7 @@ CUOBJS := $(subst .cu,.o,$(GPUFILES))
 DFLAGS += -DCUDA #-DCUDA_ERROR_CHECK
 
 #To use MPI, DFLAGS must also include -DMPI_CHOLLA
-DFLAGS += -DMPI_CHOLLA -DBLOCK
+DFLAGS += -DMPI_CHOLLA # -DBLOCK
 
 #Set the MPI Processes grid [nproc_x, nproc_y, nproc_z]
 #DFLAGS += -DSET_MPI_GRID
@@ -59,8 +59,8 @@ DFLAGS += -DDE
 #DFLAGS += -DSCALAR
 
 # Apply a minimum value to Conserved values
-#DFLAGS += -DDENSITY_FLOOR
-#DFLAGS += -DTEMPERATURE_FLOOR
+DFLAGS += -DDENSITY_FLOOR
+DFLAGS += -DTEMPERATURE_FLOOR
 
 # Average Slow cell when the cell delta_t is very small
 #DFLAGS += -DAVERAGE_SLOW_CELLS
@@ -69,8 +69,8 @@ DFLAGS += -DDE
 #DFLAGS += -DDYNAMIC_GPU_ALLOC
 
 # Set the cooling function
-#DFLAGS += -DCOOLING_GPU 
-#DFLAGS += -DCLOUDY_COOL
+DFLAGS += -DCOOLING_GPU 
+DFLAGS += -DCLOUDY_COOL
 
 # Use Tiled Iitial Conditions for Scaling Tets
 #DFLAGS += -DTILED_INITIAL_CONDITIONS
